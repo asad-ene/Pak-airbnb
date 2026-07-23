@@ -74,6 +74,33 @@ const skurduBase: BaseListing[] = [
   { id: "s6", title: "Guest house in Gulmit", price: 3300, nights: 2, rating: 4.96, guestFavorite: true },
 ];
 
+const kaghanBase: BaseListing[] = [
+  { id: "k1", title: "Guest house in Skardu", price: 4000, nights: 2, rating: 4.95, guestFavorite: true },
+  { id: "k2", title: "Room with Attabad view", price: 3500, nights: 2, rating: 4.90 },
+  { id: "k3", title: "Cottage in Karimabad", price: 5500, nights: 2, rating: 4.97, guestFavorite: true },
+  { id: "k4", title: "Homestay near Baltit Fort", price: 2800, nights: 2, rating: 4.89, guestFavorite: true },
+  { id: "k5", title: "Apartment in Skardu Valley", price: 4800, nights: 2, rating: 4.94 },
+  { id: "k6", title: "Guest house in Gulmit", price: 3300, nights: 2, rating: 4.96, guestFavorite: true },
+];
+
+const khunjerabBase: BaseListing[] = [
+  { id: "kh1", title: "Guest house in Skardu", price: 4000, nights: 2, rating: 4.95, guestFavorite: true },
+  { id: "kh2", title: "Room with Attabad view", price: 3500, nights: 2, rating: 4.90 },
+  { id: "kh3", title: "Cottage in Karimabad", price: 5500, nights: 2, rating: 4.97, guestFavorite: true },
+  { id: "kh4", title: "Homestay near Baltit Fort", price: 2800, nights: 2, rating: 4.89, guestFavorite: true },
+  { id: "kh5", title: "Apartment in Skardu Valley", price: 4800, nights: 2, rating: 4.94 },
+  { id: "kh6", title: "Guest house in Gulmit", price: 3300, nights: 2, rating: 4.96, guestFavorite: true },
+];
+
+const swatBase: BaseListing[] = [
+  { id: "sa1", title: "Guest house in Skardu", price: 4000, nights: 2, rating: 4.95, guestFavorite: true },
+  { id: "sa2", title: "Room with Attabad view", price: 3500, nights: 2, rating: 4.90 },
+  { id: "sa3", title: "Cottage in Karimabad", price: 5500, nights: 2, rating: 4.97, guestFavorite: true },
+  { id: "sa4", title: "Homestay near Baltit Fort", price: 2800, nights: 2, rating: 4.89, guestFavorite: true },
+  { id: "sa5", title: "Apartment in Skardu Valley", price: 4800, nights: 2, rating: 4.94 },
+  { id: "sa6", title: "Guest house in Gulmit", price: 3300, nights: 2, rating: 4.96, guestFavorite: true },
+];
+
 export const naranListings: Listing[] = naranBase.map((base, i) =>
   withDetails(base, rotate(destinationImages.naran, i), "Naran, Khyber Pakhtunkhwa", i)
 );
@@ -83,10 +110,29 @@ export const hunzaListings: Listing[] = hunzaBase.map((base, i) =>
 );
 
 export const skurduListings: Listing[] = skurduBase.map((base, i) =>
-  withDetails(base, rotate(destinationImages.hunza, i), "Skardu, Gilgit-Baltistan", i + naranBase.length)
+  withDetails(base, rotate(destinationImages.skardu, i), "Skardu, Gilgit-Baltistan", i + naranBase.length)
 );
 
-export const ALL_LISTINGS: Listing[] = [...naranListings, ...hunzaListings];
+export const kaghanListings: Listing[] = kaghanBase.map((base, i) =>
+  withDetails(base, rotate(destinationImages.kaghan, i), "Kaghan Valley, Khyber Pakhtunkhwa", i + naranBase.length + hunzaBase.length)
+);
+
+export const khunjerabListings: Listing[] = khunjerabBase.map((base, i) =>
+  withDetails(base, rotate(destinationImages.khunjerab, i), "Khunjerab / Sost, Gilgit-Baltistan", i + naranBase.length + hunzaBase.length + skurduBase.length)
+);
+
+export const swatListings: Listing[] = swatBase.map((base, i) =>
+  withDetails(base, rotate(destinationImages.swat, i), "Swat & Kalam, Khyber Pakhtunkhwa", i + naranBase.length + hunzaBase.length + skurduBase.length + kaghanBase.length)
+);
+
+export const ALL_LISTINGS: Listing[] = [
+  ...naranListings,
+  ...hunzaListings,
+  ...skurduListings,
+  ...kaghanListings,
+  ...khunjerabListings,
+  ...swatListings,
+];
 
 export function getListingById(id: string): Listing | undefined {
   return ALL_LISTINGS.find((l) => l.id === id);

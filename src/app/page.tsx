@@ -11,7 +11,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { useLiveQuote } from "@/hooks/useLiveQuote";
 import { DESTINATIONS } from "@/lib/destinations";
 import { heroImages } from "@/lib/heroImages";
-import { naranListings, hunzaListings, skurduListings } from "@/lib/listings";
+import { naranListings, hunzaListings, skurduListings, kaghanListings, swatListings, khunjerabListings} from "@/lib/listings";
 import { Footer } from "@/components/layout/Footer";
 
 export default function HomePage() {
@@ -60,8 +60,8 @@ export default function HomePage() {
               </h1>
               <p className="mx-auto mt-4 max-w-xl text-base text-[#717171] sm:text-lg">
                 Choose your destination, see your price instantly, and book
-                guest houses, cottages, and homestays in Naran, Hunza, Skardu,
-                and beyond.
+                guest houses, cottages, and homestays across Naran, Hunza,
+                Skardu, Kaghan, Khunjerab, Swat, and beyond.
               </p>
             </div>
 
@@ -121,7 +121,7 @@ export default function HomePage() {
             <Reveal delay={220}>
               <div className="mx-auto mt-6 flex max-w-4xl flex-wrap items-center justify-center gap-2">
                 <span className="text-xs text-[#717171]">Popular:</span>
-                {DESTINATIONS.slice(0, 5).map((dest) => (
+                {DESTINATIONS.slice(0, 7).map((dest) => (
                   <button
                     key={dest.id}
                     type="button"
@@ -180,6 +180,15 @@ export default function HomePage() {
         </Reveal>
         <Reveal>
           <PopularHomesRow location="Skurdu" listings={skurduListings} />
+        </Reveal>
+        <Reveal>
+          <PopularHomesRow location="Kaghan" listings={kaghanListings} />
+        </Reveal>
+        <Reveal>
+          <PopularHomesRow location="Khunjerab" listings={khunjerabListings} />
+        </Reveal>
+        <Reveal>
+          <PopularHomesRow location="Swat" listings={swatListings} />
         </Reveal>
 
         {/* Destination highlights */}
