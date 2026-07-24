@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useRouter, useSearchParams } from "next/navigation";
 import { Suspense, useEffect, useState, type FormEvent } from "react";
+import { signIn } from "next-auth/react";
 import { Navbar } from "@/components/layout/Navbar";
 import { Reveal } from "@/components/ui/Reveal";
 import { useGuestAuth } from "@/hooks/useGuestAuth";
@@ -19,16 +20,13 @@ function LoginForm() {
   const router = useRouter();
   const searchParams = useSearchParams();
   const redirectTo = searchParams.get("redirect") || "/";
-  const { guest, ready, login } = useGuestAuth();
+  const authError = searchParams.get("error");
+  const { guest, ready, login, logout } = useGuestAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
-
-  useEffect(() => {
-    if (ready && guest) router.replace(redirectTo);
-  }, [ready, guest, router, redirectTo]);
 
   function handleSubmit(e: FormEvent) {
     e.preventDefault();
@@ -93,9 +91,9 @@ function LoginForm() {
                   />
                 </div>
 
-                {error && (
+                {(error || authError) && (
                   <p role="alert" className="text-sm text-red-600">
-                    {error}
+                    {error ?? authError}
                   </p>
                 )}
 
@@ -107,6 +105,29 @@ function LoginForm() {
                   {submitting ? "Logging in…" : "Log in"}
                 </button>
               </form>
+
+              <div className="mt-4">
+                <button
+                  type="button"
+                  onClick={async () => {
+                    setError(null);
+                    const result = await signIn("google", {
+                      redirect: false,
+                      callbackUrl: redirectTo,
+                    });
+
+                    if (!result?.ok) {
+                      setError(result?.error ?? "Google sign-in failed.");
+                      return;
+                    }
+
+                    router.push(redirectTo);
+                  }}
+                  className="w-full rounded-full border border-[#dddddd] bg-white py-2.5 text-sm font-semibold text-[#222] transition hover:border-[#10b981] hover:text-[#10b981]"
+                >
+                  Continue with Google
+                </button>
+              </div>
 
               <p className="mt-6 text-center text-sm text-[#717171]">
                 New here?{" "}

@@ -1,6 +1,7 @@
 "use client";
 
 import { useCallback, useEffect, useState } from "react";
+import { useSession } from "next-auth/react";
 import {
   type Guest,
   getGuestSession,
@@ -10,13 +11,26 @@ import {
 } from "@/lib/guestAuth";
 
 export function useGuestAuth() {
+  const { data: session, status } = useSession();
   const [guest, setGuest] = useState<Guest | null>(null);
   const [ready, setReady] = useState(false);
 
   useEffect(() => {
-    setGuest(getGuestSession());
+    if (status === "loading") return;
+
+    if (session?.user?.email) {
+      setGuest({
+        id: session.user.email,
+        name: session.user.name ?? session.user.email,
+        email: session.user.email,
+        createdAt: new Date().toISOString(),
+      });
+    } else {
+      setGuest(getGuestSession());
+    }
+
     setReady(true);
-  }, []);
+  }, [session, status]);
 
   const login = useCallback((email: string, password: string) => {
     const result = loginGuest({ email, password });
