@@ -130,12 +130,22 @@ function LoginForm() {
                       callbackUrl: redirectTo,
                     });
 
-                    if (!result?.ok) {
-                      setError(result?.error ?? "Google sign-in failed.");
+                    if (!result) {
+                      // If redirect starts, signIn may return undefined.
                       return;
                     }
 
-                    router.push(redirectTo);
+                    if (result.error) {
+                      setError(result.error);
+                      return;
+                    }
+
+                    if (result.url) {
+                      window.location.href = result.url;
+                      return;
+                    }
+
+                    setError("Google sign-in failed.");
                   }}
                   className="w-full rounded-full border border-[#dddddd] bg-white py-2.5 text-sm font-semibold text-[#222] transition hover:border-[#10b981] hover:text-[#10b981]"
                 >
