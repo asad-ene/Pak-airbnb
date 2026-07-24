@@ -25,6 +25,7 @@ function LoginForm() {
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [remember, setRemember] = useState(true);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -33,7 +34,7 @@ function LoginForm() {
     setError(null);
     setSubmitting(true);
 
-    const result = login(email, password);
+    const result = login(email, password, remember);
 
     if (!result.ok) {
       setError(result.error);
@@ -89,6 +90,19 @@ function LoginForm() {
                     className="w-full rounded-xl border border-[#dddddd] px-3.5 py-2.5 text-sm text-[#222] outline-none transition focus:border-[#10b981] focus:ring-2 focus:ring-[#10b981]/20"
                     placeholder="••••••••"
                   />
+                </div>
+
+                <div className="flex items-center gap-2">
+                  <input
+                    id="remember"
+                    type="checkbox"
+                    checked={remember}
+                    onChange={(e) => setRemember(e.target.checked)}
+                    className="h-4 w-4 rounded border-[#dddddd] text-[#10b981] focus:ring-[#10b981]"
+                  />
+                  <label htmlFor="remember" className="text-sm text-[#717171]">
+                    Keep me signed in
+                  </label>
                 </div>
 
                 {(error || authError) && (

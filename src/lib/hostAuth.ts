@@ -60,10 +60,11 @@ export function signupHost(input: {
   name: string;
   email: string;
   password: string;
+  remember?: boolean;
 }): AuthResult {
   const name = input.name.trim();
   const email = input.email.trim().toLowerCase();
-  const { password } = input;
+  const { password, remember = true } = input;
 
   if (!name) return { ok: false, error: "Enter your name." };
   if (!isValidEmail(email)) return { ok: false, error: "Enter a valid email address." };
@@ -83,12 +84,12 @@ export function signupHost(input: {
   };
 
   writeHosts([...hosts, newHost]);
-  setSession(newHost.id);
+  setSession(newHost.id, remember);
 
   return { ok: true, host: toPublicHost(newHost) };
 }
 
-export function loginHost(input: { email: string; password: string }): AuthResult {
+export function loginHost(input: { email: string; password: string; remember?: boolean }): AuthResult {
   const email = input.email.trim().toLowerCase();
   const hosts = readHosts();
   const match = hosts.find((h) => h.email === email);
@@ -97,23 +98,35 @@ export function loginHost(input: { email: string; password: string }): AuthResul
     return { ok: false, error: "Incorrect email or password." };
   }
 
-  setSession(match.id);
+  setSession(match.id, input.remember ?? true);
   return { ok: true, host: toPublicHost(match) };
 }
 
 export function logoutHost() {
   if (!isBrowser()) return;
   window.localStorage.removeItem(SESSION_KEY);
+  window.sessionStorage.removeItem(SESSION_KEY);
 }
 
-function setSession(hostId: string) {
+function setSession(hostId: string, remember = true) {
   if (!isBrowser()) return;
-  window.localStorage.setItem(SESSION_KEY, hostId);
+  if (remember) {
+    window.localStorage.setItem(SESSION_KEY, hostId);
+    window.sessionStorage.removeItem(SESSION_KEY);
+  } else {
+    window.sessionStorage.setItem(SESSION_KEY, hostId);
+    window.localStorage.removeItem(SESSION_KEY);
+  }
+}
+
+function readSessionId(): string | null {
+  if (!isBrowser()) return null;
+  return window.sessionStorage.getItem(SESSION_KEY) ?? window.localStorage.getItem(SESSION_KEY);
 }
 
 export function getSession(): Host | null {
   if (!isBrowser()) return null;
-  const hostId = window.localStorage.getItem(SESSION_KEY);
+  const hostId = readSessionId();
   if (!hostId) return null;
 
   const hosts = readHosts();

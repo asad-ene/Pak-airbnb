@@ -32,14 +32,14 @@ export function useGuestAuth() {
     setReady(true);
   }, [session, status]);
 
-  const login = useCallback((email: string, password: string) => {
-    const result = loginGuest({ email, password });
+  const login = useCallback((email: string, password: string, remember = true) => {
+    const result = loginGuest({ email, password, remember });
     if (result.ok) setGuest(result.guest);
     return result;
   }, []);
 
-  const signup = useCallback((name: string, email: string, password: string) => {
-    const result = signupGuest({ name, email, password });
+  const signup = useCallback((name: string, email: string, password: string, remember = true) => {
+    const result = signupGuest({ name, email, password, remember });
     if (result.ok) setGuest(result.guest);
     return result;
   }, []);

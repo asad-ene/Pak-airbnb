@@ -21,14 +21,14 @@ export function useHostAuth() {
     setReady(true);
   }, []);
 
-  const login = useCallback((email: string, password: string) => {
-    const result = loginHost({ email, password });
+  const login = useCallback((email: string, password: string, remember = true) => {
+    const result = loginHost({ email, password, remember });
     if (result.ok) setHost(result.host);
     return result;
   }, []);
 
-  const signup = useCallback((name: string, email: string, password: string) => {
-    const result = signupHost({ name, email, password });
+  const signup = useCallback((name: string, email: string, password: string, remember = true) => {
+    const result = signupHost({ name, email, password, remember });
     if (result.ok) setHost(result.host);
     return result;
   }, []);
